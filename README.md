@@ -1,256 +1,237 @@
-# 🏥 Smart Healthcare Management System
+# 🏥 Health AI – Smart Healthcare System
 
-> An AI-powered Flask web application for early-stage disease prediction and holistic health guidance.
+A full-stack **Health AI – Smart Healthcare System** developed using **Python, Flask, and Scikit-learn** to predict likely diseases from user-selected symptoms and generate a complete health report covering descriptions, precautions, medications, diet plans, and workout suggestions.
 
----
-
-## Table of Contents
-
-1. [Overview](#overview)
-2. [Features](#features)
-3. [Project Structure](#project-structure)
-4. [Tech Stack](#tech-stack)
-5. [Getting Started](#getting-started)
-6. [Training the Model](#training-the-model)
-7. [Running the App](#running-the-app)
-8. [Dataset Guide](#dataset-guide)
-9. [Architecture](#architecture)
-10. [Disclaimer](#disclaimer)
+> ⚠️ **Disclaimer:** This project is for educational purposes only. It is **not** a medical diagnosis tool. Always consult a qualified healthcare professional.
 
 ---
 
-## Overview
+# 📸 Application Preview
 
-The Smart Healthcare Management System lets users enter symptoms through an interactive UI and receive an instant, comprehensive health report powered by a **Support Vector Classifier (SVC)** trained on a curated dataset of **41 diseases** and **132 symptoms**.
-
-The report includes:
-
-- Predicted disease name and confidence score
-- Plain-language disease description
-- Precautionary measures
-- Common medications
-- Recommended diet plan
-- Workout suggestions
+![Home Page](https://github.com/user-attachments/assets/91da35de-645f-4efe-add8-76a14a3ff83d)
 
 ---
 
-## Features
+# 🎯 Project Objective
 
-| Feature                | Description                                    |
-| ---------------------- | ---------------------------------------------- |
-| Symptom chip selector  | Search + click-to-select UI with live counter  |
-| SVC prediction         | Multi-class classifier with probability output |
-| Full health report     | 5 auxiliary datasets merged per prediction     |
-| Health blog            | Educational articles section                   |
-| Developer profile      | Showcase page                                  |
-| Print-friendly report  | CSS print styles included                      |
-| Blueprint architecture | Modular Flask routes                           |
+The objective of this project is to build a web application that lets users select their symptoms and instantly receive a machine-learning-based disease prediction along with practical health guidance. It combines a trained classification model with several supporting datasets to turn raw symptom input into a readable health report.
 
----
-
-## Project Structure
-
-```
-healthcare_system/
-├── app.py                    # Application factory & entry point
-├── config.py                 # Configuration classes (Dev / Prod / Test)
-├── requirements.txt
-├── .env.example
-├── .gitignore
-│
-├── routes/
-│   ├── __init__.py
-│   ├── main_routes.py        # Home, About, Developer, Contact
-│   ├── prediction_routes.py  # Symptom input & result
-│   └── blog_routes.py        # Blog list & detail
-│
-├── utils/
-│   ├── __init__.py
-│   ├── prediction_service.py # ML inference + dataset lookups
-│   ├── validators.py         # Input validation helpers
-│   └── logger.py             # Centralised logging setup
-│
-├── models/
-│   ├── __init__.py
-│   ├── model_trainer.py      # Train & serialise the SVC model
-│   ├── svc_model.pkl         # (generated — git-ignored)
-│   └── label_encoder.pkl     # (generated — git-ignored)
-│
-├── data/
-│   ├── Training.csv          # Symptom-disease training data
-│   ├── symtoms_df.csv
-│   ├── precautions_df.csv
-│   ├── medications.csv
-│   ├── diets.csv
-│   ├── workout_df.csv
-│   └── description.csv
-│
-├── templates/
-│   ├── base.html             # Master layout (navbar + footer)
-│   ├── index.html            # Landing page
-│   ├── symptom_input.html    # Symptom checker form
-│   ├── result.html           # Health report
-│   ├── about.html
-│   ├── developer.html
-│   ├── blog_list.html
-│   ├── blog_detail.html
-│   └── contact.html
-│
-└── static/
-    ├── css/
-    │   ├── main.css           # Global design tokens + shared styles
-    │   ├── symptom_input.css  # Chip selector styles
-    │   └── result.css         # Report card styles
-    └── js/
-        ├── main.js            # Navbar scroll, global utilities
-        └── symptom_input.js   # Chip interaction logic
-```
+The application helps users understand:
+* Most Likely Disease
+* Prediction Confidence Score
+* Plain-Language Disease Description
+* Recommended Precautions
+* Common Medications
+* Diet Plan
+* Workout Suggestions
 
 ---
 
-## Tech Stack
+# 💼 Business Problem
 
-| Layer             | Technology                   |
-| ----------------- | ---------------------------- |
-| Language          | Python 3.11                  |
-| Web Framework     | Flask 3.0                    |
-| ML Library        | Scikit-learn (SVC)           |
-| Data Processing   | Pandas, NumPy                |
-| Model Persistence | joblib                       |
-| Frontend          | Bootstrap 5, Bootstrap Icons |
-| Fonts             | DM Serif Display + DM Sans   |
+People who feel unwell often search symptoms across many websites and get scattered, confusing, or alarming information. There is no single place that links a set of symptoms to a likely condition and the next practical steps.
+
+This system transforms symptom input into a structured health report, giving users an easy-to-read starting point for understanding their condition before consulting a doctor.
 
 ---
 
-## Getting Started
+# ❓ Key Analytical Questions
 
-### Prerequisites
-
-- Python 3.11+
-- pip
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/yourusername/healthcare-system.git
-cd healthcare-system
-```
-
-### 2. Create and activate a virtual environment
-
-```bash
-python -m venv venv
-# macOS / Linux
-source venv/bin/activate
-# Windows
-venv\Scripts\activate
-```
-
-### 3. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Configure environment
-
-```bash
-cp .env.example .env
-# Edit .env and set a strong SECRET_KEY
-```
-
-### 5. Add your datasets
-
-Place the following CSV files in the `data/` directory:
-
-- `Training.csv`
-- `symtoms_df.csv`
-- `precautions_df.csv`
-- `medications.csv`
-- `diets.csv`
-- `workout_df.csv`
-- `description.csv`
+* Which disease is most likely given a specific combination of symptoms?
+* How confident is the model in its prediction?
+* What precautions are recommended for the predicted disease?
+* Which medications, diet, and workouts are commonly associated with it?
+* Is the user input valid and complete before a prediction is made?
 
 ---
 
-## Training the Model
+# 🛠️ Tools & Technologies
 
-Run this **once** (or whenever the dataset changes):
+* **Front-End:** HTML, CSS, JavaScript, Bootstrap 5, Jinja2 templates
+* **Back-End:** Python 3, Flask (application factory + blueprints)
+* **Machine Learning:** Scikit-learn (Support Vector Classifier, RBF kernel)
+* **Data Manipulation:** Pandas, NumPy
+* **Model Persistence:** Joblib
+* **Configuration & Logging:** python-dotenv, Python logging
+
+---
+
+# 📂 Dataset / Schema
+
+The project uses a symptom-disease dataset and five supporting CSV files that are merged for each predicted disease.
+
+**Training Data (`Training.csv`):**
+* 132 symptom columns (binary: 1 = present, 0 = absent)
+* `prognosis` column (disease name, 41 classes)
+
+**Supporting Data:**
+
+| File | Purpose |
+| ---- | :--- |
+| `description.csv` | Plain-language disease description |
+| `precautions_df.csv` | Four recommended precautions per disease |
+| `medications.csv` | Common medications per disease |
+| `diets.csv` | Recommended diet plan |
+| `workout_df.csv` | Workout suggestions |
+| `symtoms_df.csv` | Symptom reference details |
+
+**Data cleaning:** empty columns and duplicate rows are removed before training.
+
+---
+
+# 📈 Key Report Metrics
+
+| Metric | Description |
+| ---------------------- | :--- |
+| **Predicted Disease** | Disease with the highest model probability |
+| **Confidence Score** | Probability assigned to the prediction |
+| **Description** | Short explanation of the disease |
+| **Precautions** | Four recommended precautions |
+| **Medications** | Common medicines associated with the disease |
+| **Diet & Workout** | Suggested diet plan and workouts |
+
+---
+
+# 📊 Application Features
+
+### 1. Interactive Symptom Selector
+Search and click-to-select chip interface covering 132 symptoms, with a live counter of selected symptoms.
+
+![Symptom Selector](https://github.com/user-attachments/assets/db78dc8a-c9c7-4b0f-8df9-06f11c7c6f9f)
+
+### 2. Machine Learning Prediction
+A Support Vector Classifier trained on 41 diseases returns the most likely disease with a confidence score. Input is validated before it reaches the model.
+
+### 3. Complete Health Report
+Merges five supporting datasets with Pandas to build a full report for the predicted disease, with a print-friendly layout.
+
+![Health Report](https://github.com/user-attachments/assets/3cf0feb2-615c-4a56-b4f6-a15663c0037a)
+
+### 4. Health Blog & Informational Pages
+Includes a health blog (list and detail pages), About, Developer, and Contact pages.
+
+### 5. Clean, Modular Architecture
+Built with the Flask application factory pattern, separate blueprints for main pages, prediction, and blog, plus dedicated utilities for validation, prediction logic, and logging.
+
+---
+
+# 🧠 Model Training
+
+| Step | Details |
+| ---- | :--- |
+| Split | Stratified train-test split |
+| Model | SVC with RBF kernel |
+| Validation | Cross-validation scores printed during training |
+| Output | `svc_model.pkl` and `label_encoder.pkl` |
+
+> **Note:** The dataset is small and highly repetitive, so scores are near-perfect. They reflect the dataset and do not indicate real-world clinical accuracy.
+
+To retrain the model:
 
 ```bash
 python models/model_trainer.py
 ```
 
-This will:
-
-1. Load and preprocess `data/Training.csv`
-2. Train an SVC with RBF kernel
-3. Print accuracy and cross-validation scores
-4. Save `models/svc_model.pkl` and `models/label_encoder.pkl`
-
 ---
 
-## Running the App
-
-### Development
+# 🚀 Getting Started
 
 ```bash
-flask run
-# or
+# 1. Clone the repository
+git clone https://github.com/sainathapar007/Smart-Healthcare-System.git
+cd Smart-Healthcare-System
+
+# 2. (Optional) Create a virtual environment
+python -m venv venv
+venv\Scripts\activate        # Windows
+source venv/bin/activate     # macOS / Linux
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Set up environment variables
+cp .env.example .env         # then set a strong SECRET_KEY
+
+# 5. Run the app
 python app.py
 ```
 
-Open http://localhost:5000
+Open **http://localhost:5000** in your browser.
 
-### Production (Gunicorn)
+| Page | Route |
+| ---- | :--- |
+| Home | `/` or `/home` |
+| Check Symptoms | `/predict/` |
+| Health Blog | `/blog/` |
+| About | `/about` |
+| Developer | `/developer` |
+| Contact | `/contact` |
 
-```bash
-gunicorn -w 4 -b 0.0.0.0:8000 "app:create_app()"
+---
+
+# ⚠️ Limitations
+
+* Predictions use symptom presence only (no age, medical history, or test results).
+* Medication and diet details are general reference data, not personalized advice.
+* Predictions are not stored (no database in this version).
+
+---
+
+# 🔮 Future Improvements
+
+* Show the top 3 predictions with probabilities
+* Add user accounts and prediction history with a database
+* Add model evaluation charts (confusion matrix)
+* Deploy online (Render / Hugging Face Spaces)
+
+---
+
+# 📁 Project Files
+
+```text
+Smart-Healthcare-System/
+│
+├── app.py
+├── config.py
+├── requirements.txt
+├── .env.example
+├── .gitignore
+├── README.md
+│
+├── routes/
+│   ├── main_routes.py
+│   ├── prediction_routes.py
+│   └── blog_routes.py
+│
+├── utils/
+│   ├── prediction_service.py
+│   ├── validators.py
+│   └── logger.py
+│
+├── models/
+│   ├── model_trainer.py
+│   ├── svc_model.pkl
+│   └── label_encoder.pkl
+│
+├── data/
+│   ├── Training.csv
+│   ├── description.csv
+│   ├── precautions_df.csv
+│   ├── medications.csv
+│   ├── diets.csv
+│   ├── workout_df.csv
+│   └── symtoms_df.csv
+│
+├── templates/
+└── static/
 ```
 
 ---
 
-## Dataset Guide
+# 👨‍💻 Author
 
-| File                 | Required Columns                           |
-| -------------------- | ------------------------------------------ |
-| `Training.csv`       | symptom columns + `prognosis`              |
-| `description.csv`    | `Disease`, `Description`                   |
-| `precautions_df.csv` | `Disease`, `Precaution_1` … `Precaution_4` |
-| `medications.csv`    | `Disease`, `Medication_1` …                |
-| `diets.csv`          | `Disease`, `Diet_1` …                      |
-| `workout_df.csv`     | `Disease`, `workout`                       |
+**Sainath Apar**
+B.Tech – Computer Science & Engineering
 
----
-
-## Architecture
-
-```
-User Browser
-    │
-    ▼
-Flask Routes (Blueprints)
-    │
-    ├── main_routes.py      → Static pages
-    ├── prediction_routes.py → POST /predict/result
-    │       │
-    │       ▼
-    │   validators.py       → Validate + sanitise input
-    │       │
-    │       ▼
-    │   prediction_service.py → Feature vector → SVC → HealthReport
-    │       │
-    │       ├── svc_model.pkl
-    │       ├── label_encoder.pkl
-    │       └── CSV datasets (description, precautions, meds, diet, workout)
-    │
-    └── blog_routes.py      → Blog pages
-```
-
----
-
-## Disclaimer
-
-> This system is developed for **educational and research purposes** as part of a B.Tech final-year project.  
-> It is **not** a certified medical device and should **not** replace the advice of a qualified healthcare professional.  
-> Always consult a licensed physician for clinical diagnosis and treatment.
+* LinkedIn: [linkedin.com/in/sainathapar](https://www.linkedin.com/in/sainathapar)
+* GitHub: [github.com/sainathapar007](https://github.com/sainathapar007)
